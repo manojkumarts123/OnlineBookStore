@@ -23,9 +23,9 @@
       </ul>
 
     <!---About--->
-    <div class='mid'>
-      <h1 class='about__title'>ONLINE BOOK STORE</h1>
-      <div class="about__text">
+    <div class='mid mid__section'>
+      <h1 class='mid__title'>ONLINE BOOK STORE</h1>
+      <div class="mid__text">
       <p>The website contains login page where users can login to their account. If user don’t have account,
         they can create one. For creating account, one need to register using registration page. After logged in,
         if user is administrator, he/she can view his books, add no of quantities available, modify and delete particular book details.
