@@ -147,19 +147,19 @@
                 <?php
                   echo("<p>".$row['description']."</p>");
                   echo("<div class='row'><div class='col-25'>");
-                  echo("Book</div><div class='col-75'>:".$row['name']."</div></div>");
+                  echo("Book</div><div class='col-75'>: ".$row['name']."</div></div>");
                   echo("<div class='row'><div class='col-25'>");
-                  echo("Author</div><div class='col-75'>:".$row['author']."</div></div>");
+                  echo("Author</div><div class='col-75'>: ".$row['author']."</div></div>");
                   echo("<div class='row'><div class='col-25'>");
-                  echo("Year</div><div class='col-75'>:".$row['year']."</div></div>");
+                  echo("Year</div><div class='col-75'>: ".$row['year']."</div></div>");
                   echo("<div class='row'><div class='col-25'>");
-                  echo("Publisher</div><div class='col-75'>:".$row['publisher']."</div></div>");
+                  echo("Publisher</div><div class='col-75'>: ".$row['publisher']."</div></div>");
                   echo("<div class='row'><div class='col-25'>");
-                  echo("Category</div><div class='col-75'>:".$row['category']."</div></div>");
+                  echo("Category</div><div class='col-75'>: ".$row['category']."</div></div>");
                   echo("<div class='row'><div class='col-25'>");
-                  echo("Stock</div><div class='col-75'>:".$row1['number']."</div></div>");
+                  echo("Stock</div><div class='col-75'>: ".$row1['number']."</div></div>");
                   echo("<div class='row'><div class='col-25'>");
-                  echo("Price</div><div class='col-75'>:".$row['price']."</div></div>");
+                  echo("Price</div><div class='col-75'>: ".$row['price']."</div></div>");
                   echo("<ul class='edit'>");
                   echo("<li><a class='edit_link' href='edit.php'>EDIT</a></li>");
                   echo("<li><a class='edit_link' href='addstock.php'>ADD STOCK</a></li>");
@@ -169,7 +169,7 @@
               </div>
             </div>
             <div class='bsv__review'>
-              <p>Reveiw</p>
+              <p class='review__title'>Reveiw</p>
               <?php
               $st = $pdo->prepare("SELECT * FROM review WHERE book_id = :bid");
               $st->execute(array(':bid' => $_SESSION['bsearch']));
