@@ -171,15 +171,20 @@
             <div class='bsv__review'>
               <p>Reveiw</p>
               <?php
+              $st = $pdo->prepare("SELECT * FROM review WHERE book_id = :bid");
+              $st->execute(array(':bid' => $_SESSION['bsearch']));
 
+              while($row = $st->fetch(PDO::FETCH_ASSOC)){
+                $st1 = $pdo->prepare("SELECT * FROM customer WHERE customer_id = :cid");
+                $st1->execute(array(':cid' => $row['customer_id']));
+                $row1 = $st1->fetch(PDO::FETCH_ASSOC);
+                echo("<p>".$row1['Name']."</p>
+                <pre><p style='border-bottom:2px solid grey'>    ".$row['review']."</p></pre>");
               ?>
-              <form>
-                <label><textarea class='input__text' type="text" rows='4' name="review"></textarea></label>
-                <input type='submit' value='submit'>
-              </form>
             </div>
             <?php
           }
+        }
 
           else{
             $st = $pdo -> prepare("SELECT * FROM book where admin_id=:aid");

@@ -186,11 +186,9 @@
             </tr>");
             $column = 1;
           }
-          echo("hi".$_SESSION['user']." ".$row['cart_no']."   ");
           $st1 = $pdo->prepare("SELECT * FROM orders WHERE cart_no = :result");
           $st1->execute(array(':result' => $cartid[$i]));
           $row1 = $st1->fetch(PDO::FETCH_ASSOC);
-          echo("hello ".$_SESSION['user']." ".$row1['order_id']."   ");
           $st2 = $pdo->prepare("SELECT * FROM order_list WHERE order_id=:oid");
           $st2->execute(array(':oid' => $row1['order_id']));
           $row2 = $st2->fetch(PDO::FETCH_ASSOC);

@@ -24,6 +24,10 @@
       ':cid' => $_SESSION['cid'],
       ':id' => $_SESSION['user'],
     ));
+    $st= $pdo->prepare("UPDATE cart_list SET status='Processing' where cart_no = :cid");
+    $st->execute(array(
+      ':cid' => $_SESSION['cid'],
+    ));
     date_default_timezone_set("Asia/Calcutta");
     $st= $pdo->prepare("INSERT INTO order_list(status, date, time) values('PAYMENT DONE', :d, :t)");
     $st->execute(array(
