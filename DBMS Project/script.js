@@ -8,3 +8,7 @@ function types(){
   a.value="";
   a.checked=false;
 }
+
+function Dispatchmessage(){
+  document.getElementById('dispatchmessage').innerHTML = "All books need to be processed";
+}

@@ -22,6 +22,7 @@ input{
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
   cursor: pointer;
+  padding:10px;
 }
 
 table{
@@ -43,6 +44,9 @@ th{
 
 }
 
+select{
+  padding:10px;
+}
 /*---a link button---*/
 .button{
   border: 1px solid black;
@@ -55,7 +59,8 @@ th{
 .container{
   border-radius: 5px;
   background-color: #f2f2f2;
-  padding: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
   border: 1px solid black;
 }
 
@@ -94,7 +99,7 @@ h3{
   padding: 10px;
   margin: 10px;
   border-radius: 4px;
-  float: right;
+  border: 1px solid black;
 }
 
 
@@ -106,11 +111,20 @@ h3{
   outline: 1px solid black;
 }
 
+.input__submit, .input__button{
+  float:right;
+}
+
+.add__button{
+  float:left;
+}
+
 .row:after {
   content: "";
   display: table;
   clear: both;
 }
+
 /*---login---*/
 .container__login{
   position:relative;
@@ -123,10 +137,18 @@ h3{
 /*---Sign Up---*/
 .container__signup{
   position:relative;
-  top:12%;
+  top:5%;
   left:25%;
   width:50%;
-  height:76%;
+  height:650px;
+}
+.container__profile{
+  position:relative;
+  margin-top: 51px;
+  top:5%;
+  left:25%;
+  width:50%;
+  height:600px;
 }
 
 /*---navigation---*/
@@ -139,6 +161,7 @@ h3{
     /*top:0px;
     left: 0px;*/
     width:100%;
+    z-index: 1;
 }
 
 .nav__l_item{
@@ -163,6 +186,42 @@ h3{
   background: black;
 }
 
+/*-----dropdown menu-----*/
+
+.dropbtn {
+  color: white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: relative;
+  top:51px;
+  right:0px;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #ddd;}
+
+.dropbtn:hover .dropdown-content {display: block;}
+
+.dropdown:hover .dropbtn {background-color: #3e8e41;}
 
 /*---middle---*/
 
@@ -253,6 +312,36 @@ margin-top : 51px;
   text-align: center;
 }
 
+.gallery {
+  margin: 25px;
+  border: 1px solid black;
+  float: left;
+  width: 180px;
+
+
+}
+
+.gallery:hover {
+  border: 1px solid #777;
+}
+
+.gallery img {
+  width: 100%;
+  height: 230px;
+  //border: 1px solid black;
+}
+
+.desc {
+  padding: 15px;
+  text-align: center;
+  width:100%;
+  height:75px;
+  border-top: 1px solid black;
+}
+
+.add__button{
+  margin-left: 25px;
+}
 /*---book search view---*/
 
 .bsv{
@@ -274,11 +363,11 @@ margin-top : 51px;
   width:75%;
   float:right;
   height:50%;
-  padding: 10px 50px;
+  padding: 0px 50px;
 }
 
 .quantity_btn{
-  width:40px;
+  width:60px;
   height: 40px;
   margin: 5px;
 }
@@ -296,17 +385,46 @@ margin-top : 51px;
 .bsv__review{
 
 }
+.review__title{
 
+  border-bottom:1px solid black;
+}
+
+#selectcategory{
+  padding:10px;
+}
 /*-----add book-----*/
 .container__add{
   margin-top: 51px;
   position:relative;
-  top:51px;
+  top:5%;
   left:25%;
   width:50%;
-  height:75%;
+  height:700px;
 }
 
+/*----add stocks---*/
+.container__addstock{
+  margin-top: 51px;
+  position:relative;
+  top:8%;
+  left:25%;
+  width:50%;
+  height:550px;
+}
+
+/*-----delete-----*/
+.container__delete{
+  margin-top: 51px;
+  position:relative;
+  top:5%;
+  left:25%;
+  width:50%;
+  height:600px;
+}
+.mid__add{
+  height:800px;
+}
 /*-------------------about---------------*/
 
 .about__title{
@@ -326,10 +444,11 @@ margin-top : 51px;
 .cart_info{
   display:flex;
   flex-wrap: wrap;
-  align-items:center;
   margin-left: 20px;
 }
-
+.cart_detail{
+  text-align:left;
+}
 .cart_image{
   height: 100px;
   width: 80px;

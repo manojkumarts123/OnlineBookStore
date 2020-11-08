@@ -4,6 +4,13 @@
     if ( isset($_POST["name"]) && isset($_POST["email"]) && isset($_POST["phone"])
     && isset($_POST["door_no"]) && isset($_POST["street"]) && isset($_POST["city"]) &&
     isset($_POST["gender"]) && isset($_POST["password"]) && isset($_POST["account"]) ) {
+      if ( $_POST["name"]=='' || $_POST["email"]=='' || $_POST["phone"]==''
+      || $_POST["door_no"]=='' || $_POST["street"]=='' || $_POST["city"]=='' ||
+      $_POST["gender"]=='' || $_POST["password"]=='' || $_POST["account"]=='') {
+        $_SESSION['error'] = "Please enter all the details";
+        header("location: signup.php");
+        return;
+      }
         if($_POST["account"] == "customer"){
             $sql = "INSERT INTO customer (Name, Email, Phone, Door_no, Street, City, Gender, Password)
                     VALUES (:name, :email, :phone, :door_no, :street, :city, :gender, :password)";
@@ -36,6 +43,7 @@
             return;
         }
     }
+    
 
 ?>
 
@@ -47,6 +55,12 @@
     <body>
       <div class="container container__signup">
         <h3>Register Account</h3>
+        <?php
+        if ( isset($_SESSION["error"]) ) {
+            echo('<p style="color:red">'.$_SESSION["error"]."</p>\n");
+            unset($_SESSION["error"]);
+        }
+        ?>
         <form method="post">
           <div class='row'>
             <div class='col-25'><label class='input__label'>Name</label></div>
@@ -88,6 +102,7 @@
             <label><input type="radio" name="account" value="administrator">Administrator</label></div>
           </div>
           <input class='input__submit' type="submit" value="Sign up">
+          <a class='input__button' href='loginpage.php'>Go Back</a>
         </form>
     </body>
 </html>

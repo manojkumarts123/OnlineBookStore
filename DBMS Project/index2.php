@@ -18,8 +18,9 @@
         <li class="nav__l_item " ><a href = 'index2.php' class="nav__link active">HOME</a></li>
         <li class="nav__l_item"><a href = 'about.php' class="nav__link">ABOUT</a></li>
         <li class="nav__l_item"><a href = 'contact.php' class="nav__link">CONTACT</a></li>
+        <li class="nav__r_item"><a href = 'logout.php' class="nav__link">LOG OUT</a></li>
         <li class="nav__r_item"><a href = 'profile2.php' class="nav__link">PROFILE</a></li>
-        <li class="nav__r_item"><a href = '#sales.php' class="nav__link">SALES</a></li>
+        <li class="nav__r_item"><a href = 'orders.php' class="nav__link">ORDERS</a></li>
       </ul>
 
 
@@ -32,7 +33,8 @@
       <div class='mid__left'>
 
         <?php
-        $st = $pdo->query("SELECT category FROM book");
+        $st = $pdo->prepare("SELECT category FROM book where admin_id = :aid");
+        $st->execute(array(':aid' => $_SESSION['user']));
         $type = array();
         $index=0; $flag=0;
         //finding sorted order of type
@@ -87,85 +89,57 @@
             unset($_SESSION["message"]);
           }
           if(isset($_POST["search"])){
-              $st =$pdo -> prepare("SELECT * FROM book WHERE name LIKE concat('%',:n,'%')");
-              $st->execute(array(':n' => $_POST["search"]));
+              $st =$pdo -> prepare("SELECT * FROM book WHERE admin_id=:aid and name LIKE concat('%',:n,'%')");
+              $st->execute(array('aid' => $_SESSION['user'], ':n' => $_POST["search"]));
               $column = 0;
               $search = 'no';
-              while ($row = $st->fetch(PDO::FETCH_ASSOC)){
-                if($column == 0){
-                  echo ("<table >");
-                  echo ("<tr><th>Name</th>");
-                  echo ("<th>Author</th>");
-                  echo ("<th>Year</th>");
-                  echo ("<th>Type</th>");
-                  echo ("<th>Action</th></tr>");
-                  $column = 1;
-                }
+              echo("<div class='row'>");
+              while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
                 $search = "yes";
-                echo ("<tr><td>");
-                echo(htmlentities($row['name']));
-                echo("</td><td>");
-                echo(htmlentities($row['author']));
-                echo("</td><td>");
-                echo(htmlentities($row['year']));
-                echo("</td><td>");
-                echo(htmlentities($row['category']));
-                echo("</td><td>");
-                echo("<form method='post'>
-                      <input type='hidden' name='bsearch' value='".htmlentities($row['book_id'])."'>
-                      <input type='submit' class='bv__link' value='View'></form>");
-                echo("</td></tr>\n");
-
+                echo("<div class='gallery'>
+                    <a href='index2.php?bsearch=".$row['book_id']."'>
+                    <input type='hidden' name='bsearch' value='".$row['book_id']."'>
+                    <img class='image' src='".$row['image']."'>
+                    <div class='desc'>".$row['name']."</div></a>
+                </div>");
               }
-             echo "</table>";
+
              if($search == "yes"){
-               echo("<a href='add.php'>ADD BOOK</a>");
+               echo("</div><div><a class='input__button add__button' href='add.php'>ADD BOOK</a></div>");
              }
              else{
-               echo ("No search result");
+               echo ("</div>No search result");
              }
             }
 
           elseif(isset($_POST["bname"])){
 
-              $st = $pdo->prepare("SELECT * FROM book WHERE category= :n");
-              $st->execute(array(':n' => $_POST['bname']));
-              echo ("<table >");
-              echo ("<tr><th>Name</th>");
-              echo ("<th>Author</th>");
-              echo ("<th>Year</th>");
-              echo ("<th>Type</th>");
-              echo ("<th>Action</th></tr>");
+              $st = $pdo->prepare("SELECT * FROM book WHERE admin_id=:aid and  category= :n");
+              $st->execute(array(':aid' => $_SESSION['user'], ':n' => $_POST['bname']));
+              echo("<div class='row'>");
               while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-                echo ("<tr><td>");
-                echo(htmlentities($row['name']));
-                echo("</td><td>");
-                echo(htmlentities($row['author']));
-                echo("</td><td>");
-                echo(htmlentities($row['year']));
-                echo("</td><td>");
-                echo(htmlentities($row['category']));
-                echo("</td><td>");
-                echo("<form method='post'>
-                      <input type='hidden' name='bsearch' value='".htmlentities($row['book_id'])."'>
-                      <input type='submit' class='bv__link' value='View'></form>");
-                echo("</td></tr>\n");
+                echo("<div class='gallery'>
+                    <a href='index2.php?bsearch=".$row['book_id']."'>
+                    <input type='hidden' name='bsearch' value='".$row['book_id']."'>
+                    <img class='image' src='".$row['image']."'>
+                    <div class='desc'>".$row['name']."</div></a>
+                </div>");
               }
-             echo "</table>";
+             echo("</div><div><a class='input__button add__button' href='add.php'>ADD BOOK</a></div>");
              $_SESSION['bname'] = $_POST["bname"];
-             echo("<a href='add.php'>ADD BOOK</a>");
           }
 
-          elseif(isset($_POST["bsearch"])) {
-            $_SESSION['bsearch'] = $_POST['bsearch'];
+          elseif(isset($_GET["bsearch"])) {
+            $_SESSION['bsearch'] = $_GET['bsearch'];
             $st = $pdo -> prepare("SELECT * FROM book where book_id = :n");
-            $st->execute(array(':n' => $_POST['bsearch']));
+            $st->execute(array(':n' => $_GET['bsearch']));
+            $row =$st->fetch(PDO::FETCH_ASSOC);
+            $st1 = $pdo -> prepare("SELECT * FROM stock where stock_id = :n");
+            $st1->execute(array(':n' => $row['stock_id']));
+            $row1 =$st1->fetch(PDO::FETCH_ASSOC);
             ?>
 
             <div class='bsv'>
-              <?php
-                $row =$st->fetch(PDO::FETCH_ASSOC);
-              ?>
               <div class='bsv__img'>
                 <img src= <?php echo($row['image']); ?> alt= <?php echo($row['name'])?> class ='bsearch_image'>
               </div>
@@ -183,6 +157,8 @@
                   echo("<div class='row'><div class='col-25'>");
                   echo("Category</div><div class='col-75'>:".$row['category']."</div></div>");
                   echo("<div class='row'><div class='col-25'>");
+                  echo("Stock</div><div class='col-75'>:".$row1['number']."</div></div>");
+                  echo("<div class='row'><div class='col-25'>");
                   echo("Price</div><div class='col-75'>:".$row['price']."</div></div>");
                   echo("<ul class='edit'>");
                   echo("<li><a class='edit_link' href='edit.php'>EDIT</a></li>");
@@ -194,36 +170,30 @@
             </div>
             <div class='bsv__review'>
               <p>Reveiw</p>
+              <?php
+
+              ?>
+              <form>
+                <label><textarea class='input__text' type="text" rows='4' name="review"></textarea></label>
+                <input type='submit' value='submit'>
+              </form>
             </div>
             <?php
           }
 
           else{
-            $st = $pdo -> prepare("SELECT * FROM book");
-            $st->execute();
-            echo ("<table >");
-            echo ("<tr><th>Name</th>");
-            echo ("<th>Author</th>");
-            echo ("<th>Year</th>");
-            echo ("<th>category</th>");
-            echo ("<th>Action</th></tr>");
+            $st = $pdo -> prepare("SELECT * FROM book where admin_id=:aid");
+            $st->execute(array(':aid' => $_SESSION['user']));
+            echo("<div class='row'>");
             while ($row = $st->fetch(PDO::FETCH_ASSOC)) {
-              echo ("<tr><td>");
-              echo(htmlentities($row['name']));
-              echo("</td><td>");
-              echo(htmlentities($row['author']));
-              echo("</td><td>");
-              echo(htmlentities($row['year']));
-              echo("</td><td>");
-              echo(htmlentities($row['category']));
-              echo("</td><td>");
-              echo("<form method='post'>
-                    <input type='hidden' name='bsearch' value='".htmlentities($row['book_id'])."'>
-                    <input type='submit' class='bv__link' value='View'></form>");
-              echo("</td></tr>\n");
+              echo("<div class='gallery'>
+                  <a href='index2.php?bsearch=".$row['book_id']."'>
+                  <input type='hidden' name='bsearch' value='".$row['book_id']."'>
+                  <img class='image' src='".$row['image']."'>
+                  <div class='desc'>".$row['name']."</div></a>
+              </div>");
             }
-           echo "</table>";
-           echo("<a href='add.php'>ADD BOOK</a>");
+           echo("</div><div><a class='input__button add__button' href='add.php'>ADD BOOK</a></div>");
           }
         ?>
         </div>

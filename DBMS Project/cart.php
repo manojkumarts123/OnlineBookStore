@@ -24,8 +24,12 @@
       ':cid' => $_SESSION['cid'],
       ':id' => $_SESSION['user'],
     ));
-    $st= $pdo->prepare("INSERT INTO order_list(status) values('PAYMENT DONE')");
-    $st->execute();
+    date_default_timezone_set("Asia/Calcutta");
+    $st= $pdo->prepare("INSERT INTO order_list(status, date, time) values('PAYMENT DONE', :d, :t)");
+    $st->execute(array(
+      ':d' => date("d/m/Y"),
+      ':t' => date("h:i:sa"),
+    ));
     $_SESSION['order_id'] = $pdo->lastInsertId();
     $st= $pdo->prepare("INSERT INTO orders(order_id,cart_no, customer_id) values(:oid, :cid, :id)");
     $st->execute(array(
@@ -48,10 +52,12 @@
   <body>
 
       <ul class="nav__list">
-        <li class="nav__l_item " ><a href = 'index1.php' class="nav__link active">HOME</a></li>
+        <li class="nav__l_item"><a href = 'index1.php' class="nav__link active">HOME</a></li>
         <li class="nav__l_item"><a href = 'about.php' class="nav__link">ABOUT</a></li>
         <li class="nav__l_item"><a href = 'contact.php' class="nav__link">CONTACT</a></li>
-        <li class="nav__r_item"><a href = 'profile.php' class="nav__link">PROFILE</a></li>
+        <li class="nav__r_item"><a href='logout.php' class="nav__link">LOG OUT</a></li>
+        <li class="nav__r_item"><a href='profile.php' class="nav__link">PROFILE</a></li>
+        <li class="nav__r_item"><a href='history.php' class="nav__link">HISTORY</a></li>
         <li class="nav__r_item"><a href = 'cart.php' class="nav__link">CART</a></li>
       </ul>
     <div class='mid mid__section'>
@@ -77,7 +83,7 @@
             $column =1;
           }
           echo ("<tr><td><div class='cart_info'>");
-          echo("<img class='cart_image' src='".$row['image']."'><div>
+          echo("<img class='cart_image' src='".$row['image']."'><div class='cart_detail'>
           <p>".$row['name']."</p><small>Price: ".$row['price']."</small>");
           echo("<br><a  href='cart.php?action=delete&id=".$row['book_id']."'>Remove</a></div></div></td><td>");
           echo($row['no_of_quantity']);
@@ -89,7 +95,12 @@
 
           $total = $total + ($row['no_of_quantity'] * $row['price']);
           $_SESSION['total'] = $total;
-        }?>
+        }
+        if($column == 0){
+          echo("<p>Sorry, currently there is no item in the cart");
+        }
+        else{
+        ?>
         <tr>
           <td colspan='3' text-align="right">Total</td>
           <td ><?php echo number_format($total, 2); ?></td>
@@ -101,6 +112,7 @@
         <input class='input__submit' type='submit' name='checkout' value='CHECK OUT'>
       </form>
       <?php
+        }
       }
       else{
           echo ("<p>Sorry, currently there is no item in the cart");

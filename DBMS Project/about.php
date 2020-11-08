@@ -15,11 +15,25 @@
 
 
       <ul class="nav__list">
+        <?php
+          if($_SESSION['who'] == 'customer'){
+        ?>
         <li class="nav__l_item"><a href = 'index1.php' class="nav__link">HOME</a></li>
+        <?php }elseif($_SESSION['who'] == 'admin'){ ?>
+        <li class="nav__l_item"><a href = 'index2.php' class="nav__link">HOME</a></li>
+        <?php } ?>
         <li class="nav__l_item"><a href = 'about.php' class="nav__link">ABOUT</a></li>
         <li class="nav__l_item"><a href = 'contact.php' class="nav__link">CONTACT</a></li>
-        <li class="nav__r_item"><a href = 'profile.php' class="nav__link">PROFILE</a></li>
+        <li class="nav__r_item"><a href='logout.php' class="nav__link">LOG OUT</a></li>
+        <li class="nav__r_item"><a href='profile.php' class="nav__link">PROFILE</a></li>
+        <?php
+          if($_SESSION['who'] == 'customer'){
+        ?>
+        <li class="nav__r_item"><a href='history.php' class="nav__link">HISTORY</a></li>
         <li class="nav__r_item"><a href = 'cart.php' class="nav__link">CART</a></li>
+      <?php }elseif($_SESSION['who'] == 'admin'){ ?>
+        <li class="nav__r_item"><a href = 'orders.php' class="nav__link">ORDERS</a></li>
+      <?php } ?>
       </ul>
 
     <!---About--->

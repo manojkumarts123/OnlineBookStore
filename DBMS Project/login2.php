@@ -16,9 +16,10 @@
         $pw = $row['Password'];
 
         if ( $_POST['pw'] == $pw && $_POST['email'] = $email) {
+            $_SESSION['who'] = 'admin';
             $_SESSION["user"] = $row['Admin_id'];
             $_SESSION["success"] = "Logged in.";
-            $_SESSION["message"] = "Hi ".$name."  ".$row['Admin_id'] ."!!Logged in Successlly";
+            $_SESSION["message"] = "Hi ".$name."!!Logged in Successlly";
             header( 'Location: index2.php' ) ;
             return;
         } else {

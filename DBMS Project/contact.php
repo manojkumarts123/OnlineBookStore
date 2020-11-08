@@ -13,13 +13,27 @@
   <!---navigation---->
 
 
-    <ul class="nav__list">
-      <li class="nav__l_item"><a href = 'index1.php' class="nav__link">HOME</a></li>
-      <li class="nav__l_item"><a href = 'about.php' class="nav__link">ABOUT</a></li>
-      <li class="nav__l_item"><a href = 'contact.php' class="nav__link">CONTACT</a></li>
-      <li class="nav__r_item"><a href = 'profile.php' class="nav__link">PROFILE</a></li>
-      <li class="nav__r_item"><a href = 'cart.php' class="nav__link">CART</a></li>
-    </ul>
+  <ul class="nav__list">
+    <?php
+      if($_SESSION['who'] == 'customer'){
+    ?>
+    <li class="nav__l_item"><a href = 'index1.php' class="nav__link">HOME</a></li>
+    <?php }elseif($_SESSION['who'] == 'admin'){ ?>
+    <li class="nav__l_item"><a href = 'index2.php' class="nav__link">HOME</a></li>
+    <?php } ?>
+    <li class="nav__l_item"><a href = 'about.php' class="nav__link">ABOUT</a></li>
+    <li class="nav__l_item"><a href = 'contact.php' class="nav__link">CONTACT</a></li>
+    <li class="nav__r_item"><a href='logout.php' class="nav__link">LOG OUT</a></li>
+    <li class="nav__r_item"><a href='profile.php' class="nav__link">PROFILE</a></li>
+    <?php
+      if($_SESSION['who'] == 'customer'){
+    ?>
+    <li class="nav__r_item"><a href='history.php' class="nav__link">HISTORY</a></li>
+    <li class="nav__r_item"><a href = 'cart.php' class="nav__link">CART</a></li>
+  <?php }elseif($_SESSION['who'] == 'admin'){ ?>
+    <li class="nav__r_item"><a href = 'orders.php' class="nav__link">ORDERS</a></li>
+  <?php } ?>
+  </ul>
 
   <!---About--->
   <div class='mid mid__section'>
@@ -33,6 +47,9 @@
       Customer can view book details but cannot modify or delete it. If he/she want to buy particular book, it can be
       added to cart by clicking add to the cart option. Once customer is done with selecting books he/she wants to buy and added to the cart,
       he/she can procced to the payment. After the payment is done, order is placed and customer can trace their orders.</p>
+      <p>Email      : onlinebookstore@gmail.com</p>
+      <p>Facebook   : fackbook.com/onlinebookstore</p>
+      <p>Instagram  : instagram.com/onlinebookstore</p>
     </div>
   </div>
 </body>

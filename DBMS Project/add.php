@@ -2,13 +2,18 @@
   require_once "pdo.php";
   session_start();
 
-  if(isset($_POST['name']) && isset($_POST['author']) && isset($_POST['year']) && isset($_POST['category']) && isset($_POST['stock'])){
-    if($_POST['name'] == '' || $_POST['author'] == '' || $_POST['year']=='' || $_POST['category']=='' || $_POST['stock']==''){
+  if(isset($_POST['name']) && isset($_POST['author']) && isset($_POST['year']) && isset($_POST['category']) && isset($_POST['stock']) && isset($_POST['image']) && isset($_POST['price'])){
+    if($_POST['name'] == '' || $_POST['author'] == '' || $_POST['year']=='' || $_POST['category']=='' || $_POST['stock']=='' || $_POST['image']=='' || $_POST['price']==''){
       $_SESSION['error'] = "Please enter all the details";
       header('location: add.php');
       return;
     }
-    elseif ($_POST['category']=='Others' && $_POST['other']==''){
+    elseif($_POST['stock'] < 0){
+      $_SESSION['error'] = "Please enter positive number in the field of stocks";
+      header('location: add.php');
+      return;
+    }
+    elseif ($_POST['category']=='other' && $_POST['other']==''){
       $_SESSION['error'] = "Please enter Category";
     }
     else{
@@ -19,7 +24,7 @@
       $st1->execute(array(':num' => $_POST['stock']));
       $stock_num = $pdo->lastInsertId();
 
-      $st = $pdo->prepare("INSERT INTO book(name, author, year, category, publisher, description, image, stock_id, admin_id) VALUES (:n, :a, :y, :t, :p, :d, :i, :s, :a)");
+      $st = $pdo->prepare("INSERT INTO book(name, author, year, category, publisher, description, image, stock_id, admin_id, price) VALUES (:n, :a, :y, :t, :p, :d, :i, :s, :aid, :price)");
       $st->execute(array(
         ':n' => $_POST['name'],
         ':a' => $_POST['author'],
@@ -29,7 +34,8 @@
         ':d' => $_POST['description'],
         ':i' => $_POST['image'],
         ':s' => $stock_num,
-        ':a' => $_SESSION['user'],
+        ':aid' => $_SESSION['user'],
+        ':price' => $_POST['price']
       ));
       echo ("hi".$_POST['name']." ". $_POST['author']);
       echo ("hi".$stock_num." ". $_SESSION['user']);
@@ -54,17 +60,19 @@
   <body>
 
     <!---navigation---->
-      <!--<ul class="nav__list">
+      <ul class="nav__list">
         <li class="nav__l_item " ><a href = 'index2.php' class="nav__link active">HOME</a></li>
         <li class="nav__l_item"><a href = 'about.php' class="nav__link">ABOUT</a></li>
         <li class="nav__l_item"><a href = 'contact.php' class="nav__link">CONTACT</a></li>
-        <li class="nav__r_item"><a href = 'profile.php' class="nav__link">PROFILE</a></li>
-        <li class="nav__r_item"><a href = '#sales.php' class="nav__link">SALES</a></li>
+        <li class="nav__r_item"><a href='logout.php' class="nav__link">LOG OUT</a></li>
+        <li class="nav__r_item"><a href='profile.php' class="nav__link">PROFILE</a></li>
+        <li class="nav__r_item"><a href='#orders.php' class="nav__link">ORDERS</a></li>
       </ul>
 
       <!---mid section--->
-
+    <div class='mid__add'>
       <div class='container container__add'>
+        <h3>Add Book</h3>
         <?php
           if(isset($_SESSION["error"])){
             echo("<p style='color:red;'>".$_SESSION["error"]."</p>");
@@ -88,7 +96,7 @@
 
             <?php
               if(isset($_SESSION["bname"])){
-                echo("<lable><input type='hidden' name='type' value='".$_SESSION['bname']."'></label><br>");
+                echo("<lable><input type='hidden' name='category' value='".$_SESSION['bname']."'></label><br>");
                 unset($_SESSION["bname"]);
               }
               else{
@@ -127,6 +135,10 @@
               <div class='col-75'><label><input class='input__text' type="text" name="publisher"></label></div>
             </div>
             <div class='row'>
+              <div class='col-25'><label class='input__label'>Price</label></div>
+              <div class='col-75'><label><input class='input__text' type="text" name="price"></label></div>
+            </div>
+            <div class='row'>
               <div class='col-25'><label class='input__label'>No of stocks</label></div>
               <div class='col-75'><label><input class='input__text' type="text" name="stock"></label></div>
             </div>
@@ -141,5 +153,6 @@
             <input class='input__submit' type="submit" value="ADD">
         </form>
       </div>
+    </div>
   </body>
 </html>
